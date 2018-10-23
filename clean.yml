@@ -7,7 +7,7 @@
     - create_domain_user
   vars:
     create: true
-    user_mem_args_value: "{{ weblogic_servers[server].user_mem_args_value }}"
+    user_mem_args_valuex: "{{ weblogic_servers[server].user_mem_args_value }}"
   tags: always
     
 - name: ensure_ownership
