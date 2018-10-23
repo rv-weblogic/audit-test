@@ -64,6 +64,8 @@
       state: directory
       mode: 0750
       
+- command:   echo "{{ domain_account.home }}" "{{ user_mem_args_key }}"    "{{ user_mem_args_value }}"
+      
 - name: Add {{ user_mem_args_key }} to use urandom in bashrc
   lineinfile: 
       state: present
