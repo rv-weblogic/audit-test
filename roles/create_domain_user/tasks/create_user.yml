@@ -23,6 +23,14 @@
     group: "{{ domain_account.group }}"
     shell: "{{ domain_account.shell }}"
     password: "{{ weblogic_admin_password | password_hash('sha512') }}"
+    
+- name:     Allow {{domain_account.username}} to sudoers
+  lineinfile:
+    dest:         /etc/sudoers
+    state:        present
+    regexp:       '^{{domain_account.username}}'
+    line:         '{{domain_account.username}} ALL=(ALL) NOPASSWD: ALL'
+    validate:     'visudo -cf %s'                              
 
 #- name: Add authorized_keys
 #  authorized_key:
@@ -82,12 +90,3 @@
       src: .rsync-filter
       dest: "{{ domain_account.home }}/.rsync-filter"      
             
-- name:     Allow {{domain_account.username}} to sudoers
-  lineinfile:
-    dest:         /etc/sudoers
-    state:        present
-    regexp:       '^{{domain_account.username}}'
-    line:         '{{domain_account.username}} ALL=(ALL) NOPASSWD: ALL'
-    validate:     'visudo -cf %s'              
-      
-      
