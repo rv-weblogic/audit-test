@@ -1,11 +1,11 @@
 [audit_admin] 
-weblogic-01 ansible_host=10.167.46.170 ansible_port=22 ansible_user=venerari
+sdcgisazapmdw44 ansible_host=10.193.176.74 ansible_port=22 ansible_user=venerari
 
 [audit_as01] 
-weblogic-01 ansible_host=10.167.46.170 ansible_port=22 ansible_user=venerari
+sdcgisazapmdw44 ansible_host=10.193.176.74 ansible_port=22 ansible_user=venerari
 
 [audit_as02] 
-weblogic-02 ansible_host=10.167.46.164 ansible_port=22 ansible_user=venerari
+sdcgisazapmdw45 ansible_host=10.193.176.77 ansible_port=22 ansible_user=venerari
 
 [audit:children]
 audit_admin
