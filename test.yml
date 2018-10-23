@@ -1,0 +1,18 @@
+---
+
+- name: test
+  hosts: weblogic-01
+  become: true
+  gather_facts: no
+  vars:
+    test: "{{ weblogic_servers[server].instance_address }}"
+    
+
+  tasks:      
+    #- name: install tree on remote
+    #  yum: name=tree state=present
+    #- debug: var=hostvars[inventory_hostname]['ansible_default_ipv4']['address']
+    #- command: "echo {{hostvars[inventory_hostname].ansible_host}} {{inventory_hostname}}"
+    - name: 
+      command: echo {{ test }}
+    

@@ -1,0 +1,10 @@
+---
+
+- name: install_weblogic
+  hosts: all
+  become: yes
+  gather_facts: no
+  roles:
+    - install_weblogic
+  tags: always  
+  

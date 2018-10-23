@@ -1,0 +1,64 @@
+---
+
+- name: create_domain_user
+  hosts: all
+  become: yes
+  gather_facts: no
+  roles:
+    - create_domain_user
+  vars:
+    create: true
+    user_mem_args_value: "{{ weblogic_servers[server].user_mem_args_value }}"
+  tags: start
+ 
+- name: ensure_ownership
+  hosts: all
+  become: True
+  gather_facts: False
+  roles:
+    - ensure_ownership
+  tags: start
+
+- name: copy_instance
+  hosts: all
+  become: True
+  become_user: "{{ domain_account.username }}"
+  gather_facts: False
+  roles:
+    - copy_instance
+  vars:
+    weblogic_node_manager_address_as01: "{{hostvars[groups[weblogic_domain_name + '_as01'][0]].inventory_hostname}}"
+    weblogic_node_manager_address_as02: "{{hostvars[groups[weblogic_domain_name + '_as02'][0]].inventory_hostname}}"
+  tags: start
+  
+- name: node_manager_operations
+  hosts: all
+  become: True
+  become_user: "{{ domain_account.username }}"
+  gather_facts: False
+  roles:
+    - node_manager_operations
+  vars: 
+    start: True
+    weblogic_node_manager_address: "{{ weblogic_servers[server].node_manager_address }}"
+    weblogic_node_manager_port: "{{ weblogic_servers[server].node_manager_port }}"    
+  tags: start
+  
+- name: weblogic_operations
+  hosts: all
+  become: True
+  become_user: "{{ domain_account.username }}"
+  gather_facts: False
+  roles:
+    - weblogic_operations
+  vars: 
+    start: True
+    weblogic_node_manager_address: "{{ weblogic_servers[server].node_manager_address }}"
+    weblogic_node_manager_port: "{{ weblogic_servers[server].node_manager_port }}"
+    weblogic_instance_name: "{{ weblogic_servers[server].instance_name }}"
+    weblogic_instance_address: "{{ weblogic_servers[server].instance_address }}"
+    weblogic_instance_port: "{{ weblogic_servers[server].instance_port }}"
+    weblogic_instance_admin_address: "{{ weblogic_servers[weblogic_admin_prefix].instance_address }}"
+    weblogic_instance_admin_port: "{{ weblogic_servers[weblogic_admin_prefix].instance_port }}"
+  tags: start
+    

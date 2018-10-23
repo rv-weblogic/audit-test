@@ -1,0 +1,21 @@
+---
+
+# exchange ssh keys
+    
+- name: sshcopyid {{ weblogic_node_manager_address_as01 }}
+  command: '/bin/sshpass -p {{ weblogic_admin_password }} /bin/ssh-copy-id -o StrictHostKeyChecking=no {{ weblogic_node_manager_address_as02 }}'
+  when: inventory_hostname == "{{ weblogic_node_manager_address_as01 }}"
+
+- name: sshcopyid {{ weblogic_node_manager_address_as02 }}
+  command: '/bin/sshpass -p {{ weblogic_admin_password }} /bin/ssh-copy-id -o StrictHostKeyChecking=no {{ weblogic_node_manager_address_as01 }}'
+  when: inventory_hostname == "{{ weblogic_node_manager_address_as02 }}"
+
+- name: Expect the presence of config.xml 
+  register: domain_exist
+  stat: 
+      path: "{{ domain_config_xml }}"
+
+- name: rsync from "{{ weblogic_node_manager_address_as02 }}" to "{{ weblogic_node_manager_address_as01 }}" home 
+  command: /bin/rsync -avzhr --filter='dir-merge /.rsync-filter' {{ weblogic_node_manager_address_as01 }}:"{{ domain_account.home }}/" "{{ domain_account.home }}"
+  when: not domain_exist.stat.exists
+  
